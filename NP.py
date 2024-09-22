@@ -40,9 +40,15 @@ class NakNotePad:
          file_path : str = filedialog.askopenfilename(defaultextension= '.txt', filetypes= [('Text File', '*.txt')])
          if file_path:
             try:
-              with open(file_path, 'a') as file:
-                file.write(self.text_area.get(1.0,tk.END))
-              print(f'The note has been updated in: {file_path}')
+              with open(file_path, 'r') as file:
+                  existing_content = file.read()
+              new_content = self.text_area.get(1.0, tk.END).strip()
+              if new_content == existing_content:
+                  print(f'No changes detected. The note file {file_path} ramianed the same.')
+              else:
+                   with open(file_path, 'w') as file:
+                     file.write(self.text_area.get(1.0,tk.END))
+                   print(f'The note has been updated in: {file_path}')
             except Exception as e:
               print(f'Error updating file: {e}')
          else: print('No existing file to update.')
